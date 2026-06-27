@@ -1,0 +1,1 @@
+^(?<node>db_(node[1-9]\.[1-9]|master[1-9])\-[1-9])[\s\|]{4}\[Entrypoint\]\s[A-Z\s]{23}\:\s(?<pwd>[\!\@\#\$\%\^\&\*\(\)_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/\`\~\"\a-zA-Z0-9]{32})$ --flags gdsm  --outTpl 'db_cluster-${R.groups.node}\t${R.groups.pwd}' writecnf.exp root localhost 

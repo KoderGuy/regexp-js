@@ -1,0 +1,61 @@
+#!/bin/bash
+APP_NAME=jsre
+BUILD_OS=$1
+BUILD_OS=${BUILD_OS:=$(uname)}
+BUILD_OS=$(echo "${BUILD_OS}" | tr '[:upper:]' '[:lower:]' )
+BUILD_DIR=./bin
+
+if [[ ! "${BUILD_OS}" =~ (linux|darwin) ]]; then 
+    echo "ONLY LINUX OR DARWIN BUILDS.  ${BUILD_OS} NOT RECOGNIZED" 
+    exit 2; 
+fi
+
+CMD=build_${BUILD_OS}
+clean(){
+    if [ -d "${1}" ]; then
+        rm -rdf "${1}"
+    fi
+    mkdir -p "${1}" || exit 1;
+}
+
+post_clean(){
+    rm ${1}/../jsre-out.js
+    rm ${1}/../sea-prep.blob
+}
+
+build_darwin(){
+    echo "BUILDING FOR DARWIN"
+    BUILD_DIR="${BUILD_DIR}/darwin"
+    clean "${BUILD_DIR}"
+    npm install
+    npm run build
+    node --experimental-sea-config sea-config.json 
+    cp $(command -v node) ${BUILD_DIR}/${APP_NAME}
+    codesign --remove-signature ${BUILD_DIR}/${APP_NAME}
+    chmod -R u+w ${BUILD_DIR}/../
+    chmod -R g+w ${BUILD_DIR}/../
+    npx postject ${BUILD_DIR}/${APP_NAME} NODE_SEA_BLOB ${BUILD_DIR}/../sea-prep.blob \
+        --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2 \
+        --macho-segment-name NODE_SEA 
+    codesign --sign - ${BUILD_DIR}/${APP_NAME}
+
+    post_clean "${BUILD_DIR}";
+}
+
+build_linux(){
+
+    echo "BUILDING FOR LINUX"
+    BUILD_DIR="${BUILD_DIR}/linux"
+    clean "${BUILD_DIR}"    
+    npm install
+    npm run build 
+    node --experimental-sea-config sea-config.json 
+    cp $(command -v node) ${BUILD_DIR}/${APP_NAME}
+    chmod -R u+w ${BUILD_DIR}/../
+    chmod -R g+w ${BUILD_DIR}/../
+    npx postject ${BUILD_DIR}/${APP_NAME} NODE_SEA_BLOB ${BUILD_DIR}/../sea-prep.blob \
+        --sentinel-fuse NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2
+    post_clean "${BUILD_DIR}"
+}
+
+${CMD}

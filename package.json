@@ -1,0 +1,17 @@
+{
+  "name": "regexpjs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild index.js --bundle --platform=node --outfile=./bin/jsre-out.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "esbuild": "^0.23.0",
+    "nconf": "^0.12.1",
+    "readline": "^1.3.0"
+  }
+}

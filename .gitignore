@@ -1,0 +1,4 @@
+.DS_Store
+jsrebin-linux.tar.xz
+bin/*
+node_modules

@@ -1,0 +1,5 @@
+{
+    "main": "./bin/jsre-out.js",
+    "output": "./bin/sea-prep.blob",
+    "disableExperimentalSEAWarning": true
+}

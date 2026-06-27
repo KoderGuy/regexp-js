@@ -1,0 +1,17 @@
+(?<log_name>[\s\|\[\]a-zA-Z]*\:\s)(?<pwd>[a-zA-Z0-9[:punct:]]{32})
+
+/(?<node>((db_node[1-9]\.[1-9]\-[1-9])|(db_master[0-9])))(?![\s\|]{2,4})(?!\[Entrypoint\]\sGENERATED\sROOT\sPASSWORD\:\s)/g
+
+(?<node>[a-z_]{5,15}[1-9]\.[1-9]\-[1-9])(?!\s\s\|\s)(?<log_name>[\s\|\[\]a-zA-Z]*\:\s)(?<pwd>[a-zA-Z0-9[:punct:]]{32})
+
+[\!\@\#\$\%\^\&\*\(\)_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/\`\~\"\a-ZA-Z0-9]
+
+var c = 'db_node3.1-1  | [Entrypoint] GENERATED ROOT PASSWORD: B8I/6%%+O%95BnfYQeB/Y31S4Q/k.1PJ'
+var b = 'db_master1-1  | [Entrypoint] GENERATED ROOT PASSWORD: =Y*LY:qj.26E2vU3H9n&S&37=B2cA:oS'
+var a = 'db_node2.1-1  | [Entrypoint] GENERATED ROOT PASSWORD: =0q^9A3#o8uvuV#+H2ql=ic92yW=5gB:'
+
+
+'/^(?<node>(db_(node[1-9]\.[1-9]|master[1-9])\-[1-9]))([\s\|]{4})(\[Entrypoint\]\s[A-Z\s]{23}\:\s)(?<pwd>[\!\@\#\$\%\^\&\*\(\)_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/\`\~\"\a-zA-Z0-9]{32})$/sm'
+/^(?<node>(db_(node[1-9]\.[1-9]|master[1-9])\-[1-9]))([\s\|]{4})(\[Entrypoint\]\s[A-Z\s]{23}\:\s)(?<pwd>[\!\@\#\$\%\^\&\*\(\)_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/\`\~\"\a-zA-Z0-9]{32})$/mg
+
+s/^(?<node>(db_(node[1-9]\.[1-9]|master[1-9])\-[1-9]))([\s\|]{4})(\[Entrypoint\]\s[A-Z\s]{23}\:\s)(?<pwd>[\!\@\#\$\%\^\&\*\(\)_\+\-\=\{\}\|\[\]\\\:\"\;\'\<\>\?\,\.\/\`\~\"\a-zA-Z0-9]{32})$/${node}:${pwd}/mg

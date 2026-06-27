@@ -1,0 +1,15 @@
+#!/bin/bash
+
+IFS=$'\n' 
+
+INC=($(cat ./pkgs/${1}.manifest))
+
+
+if [ "$(uname)" == "Darwin" ] &&   [ "$(which gtar)" !=  "gtar not found" ] ;  then 
+CMD="gtar"
+else
+CMD='tar'
+fi
+IFS=$' '
+CMD="${CMD} --no-xattrs --lzma -cvf $1.tar.xz ${INC[*]}"
+ $CMD
